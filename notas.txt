@@ -1,0 +1,41 @@
+
+
+updated_products = Enum.map(inventory.products, fn product ->
+  if product.id == id do
+    if updated_product.stock + quantity > 0 do
+      Map.put(product, :stock, updated_product.stock - quantity)
+      buys = put_elem(inventory.shopping_cart, product.id, quantity)
+      %InventoryManager{shopping_cart: shopping_cart ++ [buys]}
+    else
+      IO.puts("No puedes agregar la cantidad: #{quantity} al carrito porque solo tienes en el stock: #{product.stock}")
+    end
+  else
+    task
+  end
+end)
+
+%InventoryManager{products: updated_products}
+
+
+# Funcion agregar producto al carrito
+def sell_product(inventory, id, quantity) do
+
+  updated_cart = inventory.shopping_cart
+
+  updated_products = Enum.map(inventory.products, fn product ->
+    if product.id == id do
+      if product.stock >= quantity do
+        Map.put(product, :stock, product.stock - quantity)
+        updated_cart = put_elem(updated_cart, product.id, quantity)
+      else
+        IO.puts("No puedes agregar la cantidad: #{quantity} al carrito porque solo tienes en el stock: #{product.stock}")
+        product
+      end
+    else
+      product
+    end
+  end)
+
+  %InventoryManager{products: updated_products, shopping_cart: updated_cart}
+
+end
